@@ -145,14 +145,6 @@
       };
     };
 
-    devShells = forEachSystem (system: let
-      pkgs = import nixpkgs {inherit system;};
-    in {
-      default = pkgs.mkShell {
-        nativeBuildInputs = with pkgs; [cryptsetup disko];
-      };
-    });
-
     packages = forEachSystem (system: let
       pkgs = import nixpkgs {inherit system;};
     in {
