@@ -21,7 +21,7 @@
         inherit system;
         specialArgs = {inherit self inputs pkgs nixpkgs system;};
         modules = [
-          self.nixosModules.default
+          inputs.airgap2go.nixosModules.default
           ({...}: {
             airgap = {
               enable = true;
