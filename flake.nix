@@ -86,8 +86,7 @@
       pkgs = import nixpkgs {inherit system;};
       inherit (pkgs) lib;
     in {
-      # Minimal configuration, adjust as needed
-      default = nixpkgs.lib.nixosSystem rec {
+      minimal = nixpkgs.lib.nixosSystem rec {
         inherit system;
         specialArgs = {inherit self inputs pkgs lib nixpkgs system;};
         modules = [
@@ -115,7 +114,6 @@
         ];
       };
 
-      # System with more and prettier tooling installed using german locale and keymap
       de_full = nixpkgs.lib.nixosSystem rec {
         inherit system;
         specialArgs = {inherit self inputs pkgs lib nixpkgs system;};
@@ -158,7 +156,7 @@
             echo "  --dry-run    Run in dry-run mode (does not require sudo)."
             echo "  <device>     Target device to install on (e.g., /dev/sdc)."
             echo "  <mountpoint> Where to mount the disk after formatting (e.g., /mnt/usb)."
-            echo "  [config]     Nix flake output for disko-install (default: default)."
+            echo "  [config]     Nix flake output for disko-install (default: .#minimal)."
             exit 1
           }
 
@@ -186,14 +184,14 @@
             usage
           fi
 
-          CONFIG=''${3:-.#default}
+          CONFIG=''${3:-.#minimal}
 
           if [ "$DRY_RUN" == true ]; then
             echo "Running in dry-run mode..."
-            disko-install --dry-run --mode format -f ".#$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
+            disko-install --dry-run --mode format -f "$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
           else
             echo "Running in actual mode (requires sudo)..."
-            sudo disko-install --mode format -f ".#$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
+            sudo disko-install --mode format -f "$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
           fi
         '';
       };

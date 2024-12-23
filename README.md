@@ -128,7 +128,10 @@ Test the configuration by using `--dry-run`, passing in the device, the root mou
 > Make sure that `device` and `rootMountPoint` match the definition in the NixOS module.
 
 ```sh
-nix run .#airgap-install -- --dry-run /dev/sdc /mnt/airgap default
+export DEVICE="/dev/sdc"
+export MOUNTPOINT="/mnt/airgap"
+export FLAKE_CONFIG=".#default"
+nix run .#airgap-install -- --dry-run "$DEVICE" "$MOUNTPOINT" "$FLAKE_CONFIG"
 ```
 
 When happy with the results, proceed to installation
@@ -139,11 +142,27 @@ When happy with the results, proceed to installation
 > and double-check that the correct device is specified in the configuration (`/dev/sdc` in this example).
 
 ```sh
-nix run .#airgap-install -- /dev/sdc /mnt/usb default
+export DEVICE="/dev/sdc"
+export MOUNTPOINT="/mnt/airgap"
+export FLAKE_CONFIG=".#default"
+nix run .#airgap-install -- "$DEVICE" "$MOUNTPOINT" "$FLAKE_CONFIG"
 ```
 
 During the process, you will be prompted to set a password for disk encryption.
 The installation process can take up to an hour or longer depending on your system and device.
+
+## Examples
+
+See [here](./examples/minimal.nix) for a example and [here](./examples/de_full.nix) for an example that uses a more optimized configuration.
+
+You could also install the airgap2go device by pointing to your own flake by referencing the installer directly
+
+```sh
+export DEVICE="/dev/sdc"
+export MOUNTPOINT="/mnt/airgap"
+export FLAKE_CONFIG="github:clemenscodes/airgap2go#de_full" # Replace with a reference to your own config
+nix run github:clemenscodes/airgap2go#airgap-install -- "$DEVICE" "$MOUNTPOINT" "$FLAKE_CONFIG"
+```
 
 ## Acknowledgements
 
