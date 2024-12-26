@@ -87,12 +87,6 @@ in {
     supportedLocales = ["all"];
   };
 
-  xdg = {
-    autostart = {
-      enable = true;
-    };
-  };
-
   documentation = {
     enable = false;
   };

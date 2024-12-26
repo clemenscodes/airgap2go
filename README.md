@@ -169,3 +169,4 @@ nix run github:clemenscodes/airgap2go#airgap-install -- "$DEVICE" "$MOUNTPOINT" 
 This was inspired by [Frankenwallet](https://github.com/rphair/frankenwallet) and [cardano-airgap](https://github.com/IntersectMBO/cardano-airgap).
 
 To read more, you can also check out the official Cardano [documentation](https://developers.cardano.org/docs/get-started/air-gap/).
+

@@ -42,12 +42,6 @@ in {
       };
     };
 
-    fonts = {
-      packages = with pkgs; [
-        nerd-fonts.iosevka
-      ];
-    };
-
     environment = {
       systemPackages = [
         pkgs.adwaita-icon-theme
@@ -86,6 +80,26 @@ in {
           iagno
           gnome-characters
         ];
+      };
+    };
+
+    home-manager = lib.mkIf config.airgap.home.enable {
+      users = {
+        ${config.airgap.user} = {
+          dconf = {
+            settings = {
+              "org/gnome/shell" = {
+                favorite-apps = [
+                  "org.gnome.Nautilus.desktop"
+                  "kitty.desktop"
+                ];
+              };
+              "org/gnome/desktop/interface" = {
+                color-scheme = "prefer-dark";
+              };
+            };
+          };
+        };
       };
     };
   };
