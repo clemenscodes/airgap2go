@@ -31,78 +31,8 @@ in {
         };
       };
 
-      displayManager = {
-        autoLogin = {
-          inherit (config.airgap) user;
-        };
-      };
       udev = {
         packages = [pkgs.gnome-settings-daemon];
-      };
-    };
-
-    users = {
-      allowNoPasswordLogin = true;
-    };
-
-    systemd = {
-      services = {
-        "getty@tty1" = {
-          enable = false;
-        };
-        "autovt@tty1" = {
-          enable = false;
-        };
-      };
-      user = {
-        services = {
-          dconf-defaults = {
-            script = let
-              dconfDefaults = pkgs.writeText "dconf.defaults" ''
-                [org/gnome/desktop/background]
-                color-shading-type='solid'
-                picture-options='zoom'
-                picture-uri='${../../../assets/cardano.png}'
-                primary-color='#000000000000'
-                secondary-color='#000000000000'
-
-                [org/gnome/desktop/lockdown]
-                disable-lock-screen=true
-                disable-log-out=true
-                disable-user-switching=true
-
-                [org/gnome/desktop/notifications]
-                show-in-lock-screen=false
-
-                [org/gnome/desktop/screensaver]
-                color-shading-type='solid'
-                lock-delay=uint32 0
-                lock-enabled=false
-                picture-options='zoom'
-                picture-uri='${../../../assets/cardano.png}'
-                primary-color='#000000000000'
-                secondary-color='#000000000000'
-
-                [org/gnome/settings-daemon/plugins/media-keys]
-                custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
-
-                [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
-                binding='<Primary><Alt>t'
-                command='kgx'
-                name='console'
-
-                [org/gnome/settings-daemon/plugins/power]
-                idle-dim=false
-                power-button-action='interactive'
-                sleep-inactive-ac-type='nothing'
-              '';
-            in ''
-              ${pkgs.dconf}/bin/dconf load / < ${dconfDefaults}
-            '';
-            wantedBy = ["graphical-session.target"];
-            partOf = ["graphical-session.target"];
-          };
-        };
       };
     };
 
