@@ -110,6 +110,8 @@ in {
         pwgen
         usbutils
         util-linux
+        ncdu
+        btop
       ])
       ++ [
         disko

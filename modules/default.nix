@@ -13,6 +13,7 @@ in {
     (import ./airgap {inherit inputs nixpkgs pkgs system lib;})
     (import ./catppuccin {inherit inputs nixpkgs pkgs system lib;})
     (import ./home {inherit inputs nixpkgs pkgs system lib;})
+    (import ./ui {inherit inputs nixpkgs pkgs system lib;})
   ];
 
   options = {
