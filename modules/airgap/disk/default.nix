@@ -62,25 +62,11 @@ in {
                   extraFormatArgs = ["--label encrypted"];
                   postMountHook = "dmsetup ls --target crypt --exec 'cryptsetup close' 2> /dev/null";
                   content = {
-                    type = "lvm_pv";
-                    vg = "pool";
+                    type = "filesystem";
+                    format = "ext4";
+                    mountpoint = "/";
                   };
                 };
-              };
-            };
-          };
-        };
-      };
-      lvm_vg = {
-        pool = {
-          type = "lvm_vg";
-          lvs = {
-            root = {
-              size = "100%";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/";
               };
             };
           };
