@@ -187,11 +187,30 @@
         text = ''
           usage() {
             echo "Usage: $0 [--dry-run] <device> [config]"
-            echo "  --dry-run    Run in dry-run mode (does not require sudo)."
-            echo "  <device>     Target device to install on (e.g., /dev/sdc)."
-            echo "  <mountpoint> Where to mount the disk after formatting (e.g., /mnt/usb)."
-            echo "  [config]     Nix flake output for disko-install (default: .#minimal)."
+            echo "  --dry-run    Run in dry-run mode"
+            echo "  --update     Update only"
+            echo "  [config]     Nix flake output for disko-install (default: github:clemenscodes/airgap2go#minimal)"
             exit 1
+          }
+
+          error() {
+            echo "Error: Invalid config or $1 not found."
+            exit 1
+          }
+
+          resolve_config_value() {
+            local config
+            local path
+            local full_uri
+            local value
+
+            config=$1
+            path=$2
+            full_uri=$(echo "$config" | awk -v insert="nixosConfigurations." -F'#' '{print $1 "#" insert $2}')
+            value=$(nix eval "$full_uri.$path" 2>/dev/null || error "$path")
+            value=$(echo "$value" | tr -d '"')
+
+            echo "$value"
           }
 
           if [ "$#" -lt 1 ]; then
@@ -199,33 +218,27 @@
           fi
 
           DRY_RUN=false
-          if [ "$1" == "--dry-run" ]; then
+          if [ "$#" -ge 1 ] && [ "$1" == "--dry-run" ]; then
             DRY_RUN=true
             shift
           fi
 
-          DEVICE=$1
-
-          if [ -z "$DEVICE" ]; then
-            echo "Error: <device> is required."
-            usage
+          MODE="format"
+          if [ "$#" -ge 1 ] && [ "$1" == "--update" ]; then
+            MODE="mount"
+            shift
           fi
 
-          MOUNTPOINT=$2
-
-          if [ -z "$MOUNTPOINT" ]; then
-            echo "Error: <mountpoint> is required."
-            usage
-          fi
-
-          CONFIG=''${3:-.#minimal}
+          CONFIG=''${1:-github:clemenscodes/airgap2go#minimal}
+          DEVICE=$(resolve_config_value "$CONFIG" "config.airgap.device")
+          MOUNTPOINT=$(resolve_config_value "$CONFIG" "config.airgap.rootMountPoint")
 
           if [ "$DRY_RUN" == true ]; then
             echo "Running in dry-run mode..."
-            disko-install --dry-run --mode format -f "$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
+            disko-install --dry-run --mode "$MODE" -f "$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
           else
             echo "Running in actual mode (requires sudo)..."
-            sudo disko-install --mode format -f "$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
+            sudo disko-install --mode "$MODE" -f "$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
           fi
         '';
       };

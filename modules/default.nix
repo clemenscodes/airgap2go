@@ -57,6 +57,7 @@ in {
       rootMountPoint = lib.mkOption {
         type = lib.types.str;
         description = "Where ${cfg.device} will be mounted after formatting with disko";
+        default = "/mnt/disko-install-root";
         example = "/mnt/usb";
       };
       locale = lib.mkOption {
