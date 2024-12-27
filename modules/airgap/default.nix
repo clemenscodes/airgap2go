@@ -46,7 +46,7 @@ in {
   };
 
   networking = {
-    hostName = cfg.host;
+    hostName = lib.mkDefault cfg.host;
     enableIPv6 = lib.mkForce false;
     interfaces = lib.mkForce {};
     useDHCP = lib.mkForce false;

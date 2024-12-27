@@ -1,13 +1,17 @@
-{inputs, ...}: {config, ...}: let
+{
+  inputs,
+  lib,
+  ...
+}: {config, ...}: let
   cfg = config.airgap;
 in {
   imports = [inputs.disko.nixosModules.disko];
   disko = {
-    inherit (cfg) rootMountPoint;
+    rootMountPoint = lib.mkDefault cfg.rootMountPoint;
     devices = {
       disk = {
         main = {
-          inherit (cfg) device;
+          device = lib.mkDefault cfg.device;
           type = "disk";
           content = {
             type = "gpt";

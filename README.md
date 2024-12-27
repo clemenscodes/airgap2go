@@ -52,7 +52,6 @@ use on your connected systems.
        ({...}: {
          airgap = {
            enable = true;
-           rootMountPoint = "/mnt/airgap";
            device = "/dev/sdc"; # Set your device name here
            keymap = "de"; # Keyboard layout
            locale = "de_DE.UTF-8"; # System locale
@@ -94,7 +93,6 @@ default = nixpkgs.lib.nixosSystem rec {
     ({...}: {
       airgap = {
         enable = true;
-        rootMountPoint = "/mnt/airgap";
         device = "/dev/sdc"; # Set the device here
         keymap = "us";
         locale = "en_US.UTF-8";
@@ -122,16 +120,14 @@ Adjust the options according to your preferences.
 
 ## Testing the Configuration
 
-Test the configuration by using `--dry-run`, passing in the device, the root mountpoint and then the flake output for the system.
+Test the configuration by using `--dry-run`, passing flake output for the system.
 
 > [!IMPORTANT]
 > Make sure that `device` and `rootMountPoint` match the definition in the NixOS module.
 
 ```sh
-export DEVICE="/dev/sdc"
-export MOUNTPOINT="/mnt/airgap"
-export FLAKE_CONFIG=".#default"
-nix run .#airgap-install -- --dry-run "$DEVICE" "$MOUNTPOINT" "$FLAKE_CONFIG"
+export FLAKE_CONFIG=".#minimal"
+nix run .#airgap-install -- --dry-run "$FLAKE_CONFIG"
 ```
 
 When happy with the results, proceed to installation
@@ -142,10 +138,8 @@ When happy with the results, proceed to installation
 > and double-check that the correct device is specified in the configuration (`/dev/sdc` in this example).
 
 ```sh
-export DEVICE="/dev/sdc"
-export MOUNTPOINT="/mnt/airgap"
 export FLAKE_CONFIG=".#default"
-nix run .#airgap-install -- "$DEVICE" "$MOUNTPOINT" "$FLAKE_CONFIG"
+nix run .#airgap-install -- "$FLAKE_CONFIG"
 ```
 
 During the process, you will be prompted to set a password for disk encryption.
@@ -158,10 +152,8 @@ See [here](./examples/minimal.nix) for a example and [here](./examples/de_full.n
 You could also install the airgap2go device by pointing to your own flake by referencing the installer directly
 
 ```sh
-export DEVICE="/dev/sdc"
-export MOUNTPOINT="/mnt/airgap"
-export FLAKE_CONFIG="github:clemenscodes/airgap2go#de_full" # Replace with a reference to your own config
-nix run github:clemenscodes/airgap2go#airgap-install -- "$DEVICE" "$MOUNTPOINT" "$FLAKE_CONFIG"
+export FLAKE_CONFIG="github:clemenscodes/airgap2go#gnome_de_full" # Replace with a reference to your own config
+nix run github:clemenscodes/airgap2go#airgap-install -- "$FLAKE_CONFIG"
 ```
 
 ## Acknowledgements
@@ -169,4 +161,3 @@ nix run github:clemenscodes/airgap2go#airgap-install -- "$DEVICE" "$MOUNTPOINT" 
 This was inspired by [Frankenwallet](https://github.com/rphair/frankenwallet) and [cardano-airgap](https://github.com/IntersectMBO/cardano-airgap).
 
 To read more, you can also check out the official Cardano [documentation](https://developers.cardano.org/docs/get-started/air-gap/).
-
