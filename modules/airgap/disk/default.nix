@@ -54,13 +54,11 @@ in {
                 size = "100%";
                 content = {
                   type = "luks";
-                  name = "encrypted";
+                  name = "crypted";
                   askPassword = true;
                   settings = {
                     allowDiscards = true;
                   };
-                  extraFormatArgs = ["--label encrypted"];
-                  postMountHook = "dmsetup ls --target crypt --exec 'cryptsetup close' 2> /dev/null";
                   content = {
                     type = "filesystem";
                     format = "ext4";
