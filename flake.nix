@@ -94,7 +94,6 @@
           ({...}: {
             airgap = {
               enable = true;
-              rootMountPoint = "/mnt/airgap";
               device = "/dev/sdc";
               keymap = "us";
               locale = "en_US.UTF-8";
@@ -109,12 +108,18 @@
               catppuccin = {
                 enable = false;
               };
+              ui = {
+                enable = false;
+                gnome = {
+                  enable = false;
+                };
+              };
             };
           })
         ];
       };
 
-      de_full = nixpkgs.lib.nixosSystem rec {
+      de_minimal_themed = nixpkgs.lib.nixosSystem rec {
         inherit system;
         specialArgs = {inherit self inputs pkgs lib nixpkgs system;};
         modules = [
@@ -122,7 +127,6 @@
           ({...}: {
             airgap = {
               enable = true;
-              rootMountPoint = "/mnt/airgap";
               device = "/dev/sdc";
               keymap = "de";
               locale = "de_DE.UTF-8";
@@ -137,12 +141,18 @@
               catppuccin = {
                 enable = true;
               };
+              ui = {
+                enable = false;
+                gnome = {
+                  enable = false;
+                };
+              };
             };
           })
         ];
       };
 
-      gnome_de_full = nixpkgs.lib.nixosSystem rec {
+      de_gnome_themed = nixpkgs.lib.nixosSystem rec {
         inherit system;
         specialArgs = {inherit self inputs pkgs nixpkgs system;};
         modules = [
@@ -150,7 +160,6 @@
           ({...}: {
             airgap = {
               enable = true;
-              rootMountPoint = "/mnt/airgap";
               device = "/dev/sdc";
               keymap = "de";
               locale = "de_DE.UTF-8";

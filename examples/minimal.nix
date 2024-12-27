@@ -25,7 +25,6 @@
           ({...}: {
             airgap = {
               enable = true;
-              rootMountPoint = "/mnt/airgap";
               device = "/dev/sdc";
               keymap = "us";
               locale = "en_US.UTF-8";
@@ -39,6 +38,12 @@
               };
               catppuccin = {
                 enable = false;
+              };
+              ui = {
+                enable = false;
+                gnome = {
+                  enable = false;
+                };
               };
             };
           })

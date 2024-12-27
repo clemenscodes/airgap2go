@@ -17,7 +17,7 @@
     pkgs = import nixpkgs {inherit system;};
   in {
     nixosConfigurations = {
-      gnome_de_full = nixpkgs.lib.nixosSystem rec {
+      de_minimal_themed = nixpkgs.lib.nixosSystem rec {
         inherit system;
         specialArgs = {inherit self inputs pkgs nixpkgs system;};
         modules = [
@@ -25,7 +25,6 @@
           ({...}: {
             airgap = {
               enable = true;
-              rootMountPoint = "/mnt/airgap";
               device = "/dev/sdc";
               keymap = "de";
               locale = "de_DE.UTF-8";
@@ -41,9 +40,9 @@
                 enable = true;
               };
               ui = {
-                enable = true;
+                enable = false;
                 gnome = {
-                  enable = true;
+                  enable = false;
                 };
               };
             };
