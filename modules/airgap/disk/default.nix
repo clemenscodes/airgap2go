@@ -32,6 +32,7 @@ in {
                 };
               };
               ESP = {
+                priority = 2;
                 type = "EF00";
                 size = "512M";
                 content = {
@@ -42,6 +43,7 @@ in {
                 };
               };
               public = {
+                priority = 3;
                 size = "4G";
                 content = {
                   type = "filesystem";
@@ -51,6 +53,7 @@ in {
                 };
               };
               private = {
+                priority = 4;
                 size = "4G";
                 content = {
                   type = "luks";
@@ -67,6 +70,7 @@ in {
                 };
               };
               root = {
+                priority = 5;
                 size = "100%";
                 content = {
                   type = "luks";
