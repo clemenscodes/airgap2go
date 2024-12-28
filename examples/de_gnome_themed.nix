@@ -16,8 +16,10 @@
     system = "x86_64-linux";
     pkgs = import nixpkgs {inherit system;};
   in {
-    nixosConfigurations = {
-      de_gnome_themed = nixpkgs.lib.nixosSystem rec {
+    nixosConfigurations = let
+      machine = "de_gnome_themed";
+    in {
+      ${machine} = nixpkgs.lib.nixosSystem rec {
         inherit system;
         specialArgs = {inherit self inputs pkgs nixpkgs system;};
         modules = [

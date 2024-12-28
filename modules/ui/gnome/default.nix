@@ -98,7 +98,7 @@ in {
                 color-scheme = "prefer-dark";
               };
               "org/gnome/desktop/default-applications/terminal" = {
-                exec = "${pkgs.kitty}/bin/kitty";
+                exec = "kitty";
               };
             };
           };

@@ -4,7 +4,11 @@
   lib,
   system,
   ...
-}: {config, ...}: let
+}: {
+  config,
+  self,
+  ...
+}: let
   cfg = config.airgap;
   capkgs = inputs.capkgs.packages.${system};
   bech32 = capkgs.bech32-input-output-hk-cardano-node-10-1-3-36871ba;
@@ -19,6 +23,7 @@ in {
   ];
 
   system = {
+    extraDependencies = [(self.packages.${system}.flake-closure self)];
     stateVersion = lib.versions.majorMinor lib.version;
   };
 
@@ -92,6 +97,11 @@ in {
   };
 
   environment = {
+    etc = {
+      flake = {
+        source = self.outPath;
+      };
+    };
     shells = with pkgs; [zsh];
     systemPackages =
       (with pkgs; [

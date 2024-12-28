@@ -42,7 +42,7 @@ in {
                 };
               };
               public = {
-                size = "8G";
+                size = "4G";
                 content = {
                   type = "filesystem";
                   format = "vfat";
@@ -50,11 +50,27 @@ in {
                   mountOptions = ["umask=0000"];
                 };
               };
-              luks = {
+              private = {
+                size = "4G";
+                content = {
+                  type = "luks";
+                  name = "private";
+                  askPassword = true;
+                  settings = {
+                    allowDiscards = true;
+                  };
+                  content = {
+                    type = "filesystem";
+                    format = "ext4";
+                    mountpoint = "/private";
+                  };
+                };
+              };
+              root = {
                 size = "100%";
                 content = {
                   type = "luks";
-                  name = "crypted";
+                  name = "root";
                   askPassword = true;
                   settings = {
                     allowDiscards = true;

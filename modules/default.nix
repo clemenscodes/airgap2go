@@ -3,6 +3,7 @@
   nixpkgs,
   pkgs,
   system,
+  self,
   ...
 }: {config, ...}: let
   cfg = config.airgap;
@@ -10,7 +11,7 @@
 in {
   imports = [
     inputs.xremap-flake.nixosModules.default
-    (import ./airgap {inherit inputs nixpkgs pkgs system lib;})
+    (import ./airgap {inherit inputs nixpkgs pkgs system lib self;})
     (import ./catppuccin {inherit inputs nixpkgs pkgs system lib;})
     (import ./home {inherit inputs nixpkgs pkgs system lib;})
     (import ./ui {inherit inputs nixpkgs pkgs system lib;})
