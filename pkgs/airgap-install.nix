@@ -61,6 +61,7 @@ pkgs.writeShellApplication {
     else
       echo "Running in actual mode (requires sudo)..."
       echo "Unmounting all partitions of $DEVICE"
+      lsblk -ln -o PATH,MOUNTPOINT | grep "$DEVICE" | awk '$2 != "" {print $1}' | xargs -r umount
       echo "Unmounted all partitions of $DEVICE"
       echo "Wiping all data of $DEVICE..."
       sudo shred -v -n 0 -z "$DEVICE"
