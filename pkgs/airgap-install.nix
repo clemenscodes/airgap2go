@@ -51,21 +51,20 @@ pkgs.writeShellApplication {
     DEVICE=$(resolve_config_value "$CONFIG" "config.airgap.device")
     MOUNTPOINT=$(resolve_config_value "$CONFIG" "config.airgap.rootMountPoint")
 
-    echo "Unmounting all partitions of $DEVICE"
-
-    lsblk -ln -o PATH,MOUNTPOINT | grep "$DEVICE" | awk '$2 != "" {print $1}' | xargs -r umount
-
-    echo "Unmounted all partitions of $DEVICE"
-
-    echo "Wiping all data of $DEVICE..."
-
-    sudo shred -v -n 0 -z "$DEVICE"
-
     if [ "$DRY_RUN" == true ]; then
       echo "Running in dry-run mode..."
+      echo "Unmounting all partitions of $DEVICE"
+      echo "Wiping all data of $DEVICE..."
+      echo "Would run: sudo shred -v -n 0 -z $DEVICE"
+      echo "Fully formatted $DEVICE"
       disko-install --dry-run --mode "$MODE" -f "$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
     else
       echo "Running in actual mode (requires sudo)..."
+      echo "Unmounting all partitions of $DEVICE"
+      echo "Unmounted all partitions of $DEVICE"
+      echo "Wiping all data of $DEVICE..."
+      sudo shred -v -n 0 -z "$DEVICE"
+      echo "Fully formatted $DEVICE"
       sudo disko-install --mode "$MODE" -f "$CONFIG" --mount-point "$MOUNTPOINT" --disk main "$DEVICE"
     fi
   '';
