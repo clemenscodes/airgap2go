@@ -23,7 +23,6 @@ in {
   ];
 
   system = {
-    extraDependencies = [(self.packages.${system}.flake-closure self)];
     stateVersion = lib.versions.majorMinor lib.version;
   };
 
