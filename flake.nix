@@ -63,6 +63,11 @@
         };
       };
     };
+
+    # New hot stuff
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+    };
   };
 
   outputs = {
@@ -191,7 +196,7 @@
       packages = import ./pkgs {inherit pkgs;};
     in {
       default = self.packages.${system}.airgap-install;
-      inherit (packages) airgap-install airgap-update flake-closure;
+      inherit (packages) airgap-install airgap-update flake-closure copyro;
     });
 
     devShells = forEachSystem (system: let

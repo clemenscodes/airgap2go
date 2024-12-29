@@ -91,14 +91,14 @@ in {
               "org/gnome/shell" = {
                 favorite-apps = [
                   "org.gnome.Nautilus.desktop"
-                  "kitty.desktop"
+                  "ghostty.desktop"
                 ];
               };
               "org/gnome/desktop/interface" = {
                 color-scheme = "prefer-dark";
               };
-              "org/gnome/desktop/default-applications/terminal" = {
-                exec = "kitty";
+              "org/gnome/desktop/applications/terminal" = {
+                exec = "ghostty";
               };
             };
           };

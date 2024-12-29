@@ -117,6 +117,7 @@ in {
         btop
       ])
       ++ [
+        self.packages.${system}.copyro
         disko
         bech32
         cardano-address
@@ -175,6 +176,19 @@ in {
                 alone: ESC
                 alone_timeout_millis: 500
       '';
+    };
+  };
+
+  systemd = {
+    services = {
+      copy-nix-config = {
+        description = "Copy read-only reference to flake into a writable path to allow changing configuration";
+        serviceConfig = {
+          Type = "oneshot";
+          wantedBy = ["multi-user.target"];
+          ExecStart = lib.getExe self.packages.${system}.copyro "/etc/flake" "/public/flake";
+        };
+      };
     };
   };
 }

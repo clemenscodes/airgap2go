@@ -63,6 +63,7 @@ in {
               size = 12;
             };
             packages = with pkgs; [
+              inputs.ghostty.packages.${system}.default
               libsForQt5.qtstyleplugin-kvantum
               libsForQt5.qt5ct
               libsForQt5.qt5.qtwayland
@@ -120,16 +121,6 @@ in {
               "gtk-4.0/assets".source = "${themePath}/gtk-4.0/assets";
               "gtk-4.0/gtk.css".source = "${themePath}/gtk-4.0/gtk.css";
               "gtk-4.0/gtk-dark.css".source = "${themePath}/gtk-4.0/gtk-dark.css";
-            };
-          };
-          programs = {
-            kitty = {
-              enable = true;
-              font = {
-                name = "Iosevka Nerd Font";
-                package = font;
-                size = 12;
-              };
             };
           };
           gtk = {
