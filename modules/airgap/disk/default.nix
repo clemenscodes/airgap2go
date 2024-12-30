@@ -44,7 +44,7 @@ in {
               };
               public = {
                 priority = 3;
-                size = "4G";
+                size = "256M";
                 content = {
                   type = "filesystem";
                   format = "vfat";
@@ -54,7 +54,7 @@ in {
               };
               private = {
                 priority = 4;
-                size = "4G";
+                size = "256M";
                 content = {
                   type = "luks";
                   name = "private";

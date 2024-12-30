@@ -3,12 +3,9 @@
   pkgs,
   lib,
   system,
-  ...
-}: {
-  config,
   self,
   ...
-}: let
+}: {config, ...}: let
   cfg = config.airgap;
   capkgs = inputs.capkgs.packages.${system};
   bech32 = capkgs.bech32-input-output-hk-cardano-node-10-1-3-36871ba;
@@ -186,7 +183,7 @@ in {
         serviceConfig = {
           Type = "oneshot";
           wantedBy = ["multi-user.target"];
-          ExecStart = lib.getExe self.packages.${system}.copyro "/etc/flake" "/public/flake";
+          ExecStart = "${lib.getExe self.packages.${system}.copyro} /etc/flake /public/flake";
         };
       };
     };

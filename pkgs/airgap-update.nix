@@ -36,11 +36,12 @@ pkgs.writeShellApplication rec {
 
     CONFIG=''${1:-github:clemenscodes/airgap2go#minimal}
     NIXOS_CONFIG=$(echo "$CONFIG" | awk -v insert="nixosConfigurations." -F'#' '{print $1 "#" insert $2}')
-    MOUNTPOINT=$(resolve_config_value "$NIXOS_CONFIG" "config.airgap.rootMountPoint")
+    UPDATE_PATH="$(pwd)/update"
 
-    disko -m mount -f "$CONFIG" --root-mountpoint "$MOUNTPOINT"
+    mkdir -p "$UPDATE_PATH"/cache
 
     nix build "$NIXOS_CONFIG".config.system.build.toplevel
-    nix-store -qR --include-outputs "$(nix-store -q --deriver ./result )" | nix copy --to file://"$(pwd)"/update
+    nix-store -qR --include-outputs "$(nix-store -q --deriver ./result )" | nix copy --to file://"$UPDATE_PATH"
+    cp -r ~/.cache/nix/eval* "$UPDATE_PATH"/cache
   '';
 }

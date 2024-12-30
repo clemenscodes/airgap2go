@@ -10,14 +10,18 @@ pkgs.writeShellApplication {
       echo "Destination does not exist. Starting copy process."
 
       copy_directory() {
-        local src="$1"
-        local dest="$2"
+        local src
+        local dest
+
+        src="$1"
+        dest="$2"
 
         mkdir -p "$dest"
 
         for item in "$src"/*; do
           [ -e "$item" ] || continue
-          local dest_item="$dest/$(basename "$item")"
+          local dest_item
+          dest_item="$dest/$(basename "$item")"
           if [ -d "$item" ]; then
             copy_directory "$item" "$dest_item"
           elif [ -f "$item" ]; then
