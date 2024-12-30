@@ -30,6 +30,18 @@ in {
     '';
 
     nixPath = ["nixpkgs=${pkgs.path}"];
+    registry = {
+      self = {
+        flake = self;
+      };
+      nixpkgs = {
+        from = {
+          id = "nixpkgs";
+          type = "indirect";
+        };
+        flake = inputs.nixpkgs;
+      };
+    };
     settings = {
       substituters = lib.mkForce [];
       trusted-users = [cfg.user];

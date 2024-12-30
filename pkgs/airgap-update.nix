@@ -1,10 +1,10 @@
-{pkgs, ...}:
-pkgs.writeShellApplication rec {
+{pkgs, ...}: let
   name = "airgap-update";
-  runtimeInputs = with pkgs; [disko];
-  text = ''
+in
+  pkgs.writeShellScriptBin name ''
     usage() {
-      echo "Usage: ${name} [config]"
+      echo "Usage: ${name} [device] [config]"
+      echo "  [device] The device to write the update to (e.g.: /dev/sdc)"
       echo "  [config] Nix flake output to update (e.g.: github:clemenscodes/airgap2go#minimal)"
       exit 1
     }
@@ -14,34 +14,24 @@ pkgs.writeShellApplication rec {
       exit 1
     }
 
-    resolve_config_value() {
-      local config
-      local path
-      local full_uri
-      local value
-
-      config=$1
-      path=$2
-      full_uri=$(echo "$config" | awk -v insert="nixosConfigurations." -F'#' '{print $1 "#" insert $2}')
-      value=$(nix eval "$full_uri.$path" 2>/dev/null || error "$path")
-      value=$(echo "$value" | tr -d '"')
-
-      echo "$value"
-    }
-
     if [ "$#" -lt 1 ]; then
       usage
     fi
 
+    DEVICE=$1
 
-    CONFIG=''${1:-github:clemenscodes/airgap2go#minimal}
+    if [ -z "$DEVICE" ]; then
+      echo "Error: <device> is required."
+      usage
+    fi
+
+    CONFIG=''${2:-github:clemenscodes/airgap2go#minimal}
     NIXOS_CONFIG=$(echo "$CONFIG" | awk -v insert="nixosConfigurations." -F'#' '{print $1 "#" insert $2}')
-    UPDATE_PATH="$(pwd)/update"
-
-    mkdir -p "$UPDATE_PATH"/cache
 
     nix build "$NIXOS_CONFIG".config.system.build.toplevel
-    nix-store -qR --include-outputs "$(nix-store -q --deriver ./result )" | nix copy --to file://"$UPDATE_PATH"
-    cp -r ~/.cache/nix/eval* "$UPDATE_PATH"/cache
-  '';
-}
+
+    echo "Writing update to $DEVICE"
+    storePath=$(nix-store -q --deriver ./result)
+    nix-store --export $(nix-store -qR $storePath) | sudo dd of="$DEVICE" status=progress
+    echo "Finished writing update to $DEVICE"
+  ''
